@@ -1,37 +1,17 @@
 # DappCamp Warriors
 
-## Create ERC20
+## Create ERC721
 
-We already scaffolded the project, created the contracts of our NFT collection, and imported third-party contracts.
+We'll give birth to the DappCamp warriors, an NFT collection using [ERC721](https://eips.ethereum.org/EIPS/eip-721).
 
-Now, it's time to create our fungible token: **$CAMP**.
-
-We will use an OpenZeppelin contract that implements the [ERC20](https://ethereum.org/es/developers/docs/standards/tokens/erc-20/) standard, which makes things pretty easy.
-
-The contract could be as simple as this:
-
-```solidity
-// SPDX-License-Identifier: MIT
-pragma solidity ^0.8.4;
-
-import "openzeppelin-contracts/token/ERC20/ERC20.sol";
-
-contract Camp is ERC20 {
-    constructor() ERC20("Camp", "CAMP") {}
-}
-```
-
-But we will add some extra magic to have more control over the supply, determining who can mint it and who can burn it.
-
-Go to [Camp.sol](src/Camp.sol) to see the explained implementation.
+Let's now go to [DappCampWarriors.sol](src/DappCampWarriors.sol), as you can see, the file is fully commented explaining what's going on.
+The format of the comments follows [NatSpec](https://docs.soliditylang.org/en/v0.8.13/natspec-format.html), the standard comment format for Solidity code.
 
 ## Test
 
-### Overview
-
 Forge comes with an in-built testing framework and allows us to write tests in Solidity itself.
 
-We added tests for ERC20 contract: [test/Camp.t.sol](test/Camp.t.sol).
+We added tests for ERC721 contract: [test/DappCampWarriors.t.sol](test/DappCampWarriors.t.sol).
 
 To run all the tests you can run:
 `forge test`
@@ -63,14 +43,14 @@ source .env
 * Run foundry script
 
 ```
-forge script script/Camp.s.sol:DeployScript --fork-url http://localhost:8545 --broadcast --private-key $PRIVATE_KEY
+forge script script/DappCampWarriors.s.sol:DeployScript --fork-url http://localhost:8545 --broadcast --private-key $PRIVATE_KEY
 ```
 
 On successful completion you must have contract addresses printed on the console. Also check the `run-latest.json` file in `broadcast` directory for details on transactions made during the running of script.
 
 ### Deploying to testnet/mainnet
 
-Follow these steps to deploy to your desired testnet:
+Follow these steps to deploy to your desired testnet, you can skip the first 3 steps if you have already done this during ERC20 deployment:
 
 * Rename `.env.example` to `.env` file.
 
@@ -81,11 +61,11 @@ Follow these steps to deploy to your desired testnet:
 * Run the following command to deploy
 
 ```bash
-forge script script/Camp.s.sol:DeployScript --broadcast
+forge script script/DappCampWarriors.s.sol:DeployScript --broadcast
 ```
 
 * Alternatively, to also verify the contract on etherscan, you can run the following command
 
 ```
-source .env && forge script script/Camp.s.sol:DeployScript --broadcast --etherscan-api-key $ETHERSCAN_KEY --verify
+source .env && forge script script/DappCampWarriors.s.sol:DeployScript --broadcast --etherscan-api-key $ETHERSCAN_KEY --verify
 ```
