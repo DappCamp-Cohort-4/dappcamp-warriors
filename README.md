@@ -1,72 +1,35 @@
 # DappCamp Warriors
 
-## NFT staking
+## Gas optimization
 
-In the context of crypto, staking can be defined as holding an asset to get rewards in exchange, you can read more [here](https://www.coinbase.com/learn/crypto-basics/what-is-staking).
+### Gas fees
 
-In this branch, we'll work on a staking contract that locks NFTs and gives ERC20 rewards.
+Turing-complete state machines are prone to the [halting problem](https://en.wikipedia.org/wiki/Halting_problem), which implies that the execution can halt at any given point in time (e.g.: a program running a `while (true)` statement).
 
-There's two important new files: [src/Staking.sol](src/Staking.sol) and [test/Staking.t.sol](test/Staking.t.sol), like always, they have explanatory comments.
+How does Ethereum, a decentralized, permissionless, Turing-complete machine prevent people from halting it?
+By imposing a gas fee on computation.
 
-## Test
+Gas fees are essential to the Ethereum network. They:
 
-Forge comes with an in-built testing framework and allows us to write tests in Solidity itself.
+* Prevent bad actors from spamming the network.
+* Can be adjusted to tip the miners and regulate transaction priority.
+* Are partially burned to diminish the Ether supply.
 
-We added tests for the `Staking` contract: [test/Staking.t.sol](test/Staking.t.sol).
+### Why we optimize gas fees
 
-To run all the tests you can run:
-`forge test`
+When computation and storage have a relevant monetary cost, optimizing them becomes important.
 
-### TDD
+We may argue that using the Ethereum network will get cheaper with future upgrades, but that's not the case for now so gas optimization is key.
 
-I recommend you trying TDD (in a nutshell, writing the tests before the code). It will help you think about potential security issues and edge cases.
+Gas optimizations can be divided in two main groups:
 
-## Deploy
+* Contract deploy gas optimizations.
+* Runtime gas optimizations.
 
-With Foundry we can write deployment scripts in solidity. These scripts are present in `script` directory. The entrypoint for these scripts is the `run` function.
+If thousands of people use your contracts everyday, runtime gas optimizations may save your users millions of dollars. On the other side, deploy gas optimizations are used just once<sup>1</sup>, but some contracts, depending on length and initial parameters, can cost thousands of dollars to deploy.
 
-You will observe that cheatcode `vm.startBroadcast()` is being used. This cheatcode helps in recording the transactions before `vm.stopBroadcast()` is called. You can view the recorded transactions in `broadcast` directory.
+1. Note that contracts [can be deployed programmatically by other contracts](https://github.com/Uniswap/v3-core/blob/ed88be38ab2032d82bf10ac6f8d03aa631889d48/contracts/UniswapV3PoolDeployer.sol#L35), in that case, optimizing deploy gas usage also optimizes runtime consumption.
 
-### Deploying locally to anvil
+### Optimizing gas fees
 
-* Start the anvil local node
-
-```bash
-anvil
-```
-
-* Set environment variables
-
-```bash
-source .env 
-```
-
-* Run foundry script
-
-```
-forge script script/Staking.s.sol:DeployScript --fork-url http://localhost:8545 --broadcast --private-key $PRIVATE_KEY
-```
-
-On successful completion you must have contract addresses printed on the console. Also check the `run-latest.json` file in `broadcast` directory for details on transactions made during the running of script.
-
-### Deploying to testnet/mainnet
-
-Follow these steps to deploy to your desired testnet, you can skip the first 3 steps if you have already done this during ERC20 or ERC721 deployment:
-
-* Rename `.env.example` to `.env` file.
-
-* Add values for `PRIVATE_KEY` and `ETHERSCAN_KEY` variables in `.env` file.
-
-* Get an rpc url of your desired testnet, this can be obtained by creating an account on [Alchemy](https://www.alchemy.com/). Replace `eth_rpc_url` in `foundry.toml` with the rpc url from Alchemy.
-
-* Run the following command to deploy
-
-```bash
-forge script script/Staking.s.sol:DeployScript --broadcast
-```
-
-* Alternatively, to also verify the contract on etherscan, you can run the following command
-
-```
-source .env && forge script script/Staking.s.sol:DeployScript --broadcast --etherscan-api-key $ETHERSCAN_KEY --verify
-```
+In the same way you can save gasoil if you accelerate your car gently, you can save gas by using the techniques we cover on this branch.
