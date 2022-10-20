@@ -1,46 +1,91 @@
 # DappCamp Warriors
 
-## Scaffolding
+## Create ERC20
 
-### Pre-requisites
+We already scaffolded the project, created the contracts of our NFT collection, and imported third-party contracts.
 
-* [Install foundry](https://book.getfoundry.sh/getting-started/installation)
+Now, it's time to create our fungible token: **$CAMP**.
+
+We will use an OpenZeppelin contract that implements the [ERC20](https://ethereum.org/es/developers/docs/standards/tokens/erc-20/) standard, which makes things pretty easy.
+
+The contract could be as simple as this:
+
+```solidity
+// SPDX-License-Identifier: MIT
+pragma solidity ^0.8.4;
+
+import "openzeppelin-contracts/token/ERC20/ERC20.sol";
+
+contract Camp is ERC20 {
+    constructor() ERC20("Camp", "CAMP") {}
+}
+```
+
+But we will add some extra magic to have more control over the supply, determining who can mint it and who can burn it.
+
+Go to [Camp.sol](src/Camp.sol) to see the explained implementation.
+
+## Test
 
 ### Overview
 
-This branch shows the scaffolding of a [Foundry](https://getfoundry.sh/) project.
+Forge comes with an in-built testing framework and allows us to write tests in Solidity itself.
 
-To get a similar result, you can do the following:
+We added tests for ERC20 contract: [test/Camp.t.sol](test/Camp.t.sol).
 
-1) Install foundry by following the instructions from here: [Getting Started](https://book.getfoundry.sh/getting-started/installation)
+To run all the tests you can run:
+`forge test`
 
-        cd .. && mkdir my-project && cd my-project
+### TDD
 
-2) To start a new project with Foundry, use the `forge init` command. Forge is a command-line tool that ships with Foundry. Forge tests, builds, and deploys your smart contracts.:
+I recommend you trying TDD (in a nutshell, writing the tests before the code). It will help you think about potential security issues and edge cases.
 
-        forge init
+## Deploy
 
-### Why Foundry
+With Foundry we can write deployment scripts in solidity. These scripts are present in `script` directory. The entrypoint for these scripts is the `run` function.
 
-Foundry is a relatively new, open-source smart contract development framework built by [Paradigm](https://paradigm.xyz/).
-Some of its benefits are:
+You will observe that cheatcode `vm.startBroadcast()` is being used. This cheatcode helps in recording the transactions before `vm.stopBroadcast()` is called. You can view the recorded transactions in `broadcast` directory.
 
-* Fast & flexible compilation pipeline
-* Tests are written in Solidity
-* Fast fuzz testing
-* Many more, listed on [its GitHub repo](https://github.com/foundry-rs/foundry)
+### Deploying locally to anvil
 
-### Files and folders
+* Start the anvil local node
 
-* `src` all your Solidity files will go here.
-* `lib` contains dependencies stored as submodules.
-* `out` compiled contract and abis
-* `script` Foundry scripts, e.g.: deploy scripts.
-* `test` this one's pretty self-explanatory.
-* `foundry.toml` configure foundry's behaviour
+```bash
+anvil
+```
 
-### Recommended tooling
+* Set environment variables
 
-#### VS Code Solidity extension
+```bash
+source .env 
+```
 
-Another useful extension is [Nomic Foundation's](https://marketplace.visualstudio.com/items?itemName=NomicFoundation.hardhat-solidity), also listed on the recommended extensions.
+* Run foundry script
+
+```
+forge script script/Camp.s.sol:DeployScript --fork-url http://localhost:8545 --broadcast --private-key $PRIVATE_KEY
+```
+
+On successful completion you must have contract addresses printed on the console. Also check the `run-latest.json` file in `broadcast` directory for details on transactions made during the running of script.
+
+### Deploying to testnet/mainnet
+
+Follow these steps to deploy to your desired testnet:
+
+* Rename `.env.example` to `.env` file.
+
+* Add values for `PRIVATE_KEY` and `ETHERSCAN_KEY` variables in `.env` file.
+
+* Get an rpc url of your desired testnet, this can be obtained by creating an account on [Alchemy](https://www.alchemy.com/). Replace `eth_rpc_url` in `foundry.toml` with the rpc url from Alchemy.
+
+* Run the following command to deploy
+
+```bash
+forge script script/Camp.s.sol:DeployScript --broadcast
+```
+
+* Alternatively, to also verify the contract on etherscan, you can run the following command
+
+```
+source .env && forge script script/Camp.s.sol:DeployScript --broadcast --etherscan-api-key $ETHERSCAN_KEY --verify
+```
