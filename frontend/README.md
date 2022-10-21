@@ -1,6 +1,8 @@
 # DappCamp Warriors
 
-In this last section we are adding the frontend for our Dapp. The frontend is at the [frontend](frontend) folder.
+## Frontend
+
+This is the the frontend for our [DappCamp Warriors](https://github.com/DappCamp-Cohort-4/dappcamp-warriors) Dapp. It is built with Next.js and ethers.js.
 
 ## Step 1: Add frontend boilerplate
 
@@ -13,4 +15,3 @@ In this last section we are adding the frontend for our Dapp. The frontend is at
   - Ethers.js is a library for interacting with the Ethereum Blockchain
 - Setup meta tags by adding a [\_document.jsx file](https://nextjs.org/docs/advanced-features/custom-document)
 - Add utility methods for common operations like fetching connected accounts and signing a contract
-- Add abis of the smart contracts ([frontend/src/data/abis](frontend/src/data/abis))
