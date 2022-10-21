@@ -1,70 +1,111 @@
 # DappCamp Warriors
 
-## Security
+## Frontend
 
-This is the most important topic of the course, and the #1 thing to have in mind while you write smart contracts.
+This is the the frontend for our Dapp. It is built with Next.js and ethers.js.
 
-At this point, I think the why is clear, so let's go to the how.
+**Structure:**
 
-### Rules of thumb for writing secure code
+- **src/pages** - Routes for our app
+- **src/components** - React components for our app
+- **src/contexts.js** - React contexts to make state available to nested components
+- **next.config.js, postcss.config.js, pretter.config.js, tailwind.config.js, tsconfig.json** - Configuration files for Next.js and Tailwind
 
-#### Test your code
+**Note:** For generating the NFT images and their metadatas you can use our [warriors-generator](https://github.com/DappCamp-Cohort-2/dappcamp-warriors/tree/main/warriors-generator).
 
-Aim for +90% coverage. Preferably, test it before writing it.
+---
 
-#### Use audited code
+### Local Development Instructions
 
-* Use [OpenZeppelin's contracts](https://github.com/OpenZeppelin/openzeppelin-contracts).
-* Try to find an audited version of what you're trying to do in [Certik's website](https://www.certik.com/).
+1. Open a terminal tab and run the following command to run a local node. Keep this terminal tab open.
 
-#### Favor security over performance
-
-Like we mentioned previously, gas consumption is a good variable to optimize for. But, if optimizing cost requires writing unreadable code or skipping security measures, take care and make sure you know what you're doing.
-
-Note that this heuristic doesn't imply that your code should be full of naive and costly security measures (like adding a [`nonReentrant` modifier](https://docs.openzeppelin.com/contracts/2.x/api/utils#ReentrancyGuard-nonReentrant--) on every function).
-
-#### Make your code readable
-
-Maybe you learned a [bit manipulation](https://en.wikipedia.org/wiki/Bit_manipulation) trick a few days ago and gas optimization seems like a good excuse to try it. Don't. Your code may be readable for you, but it will definitely cause unneeded cognitive overload to your auditors or code reviewers, or even to you in a few weeks when you're deploying your code.
-
-#### Make your code obvious
-
-Like Joel Spolsky said, [make your wrong code look wrong](https://www.joelonsoftware.com/2005/05/11/making-wrong-code-look-wrong/).
-If your contract calls untrusted third-party contracts, make it explicit:
-
-```solidity
-// bad
-Bank.withdraw(100); // Unclear whether trusted or untrusted
-
-function makeWithdrawal(uint amount) { // Isn't clear that this function is potentially unsafe
-    Bank.withdraw(amount);
-}
-
-// good
-UntrustedBank.withdraw(100); // untrusted external call
-TrustedBank.withdraw(100); // external but trusted bank contract maintained by XYZ Corp
-
-function makeUntrustedWithdrawal(uint amount) {
-    UntrustedBank.withdraw(amount);
-}
+```
+anvil
 ```
 
-> Code snippet from [Consensys](https://consensys.github.io/smart-contract-best-practices/development-recommendations/general/external-calls/#mark-untrusted-contracts).
+2. From the anvil logs, import one of the private keys into your MetaMask.
+3. Deploy the contracts in [dappcamp-warriors](https://github.com/DappCamp-Cohort-4/dappcamp-warriors) to the local node.
+4. Create a .env file and add the addresses of your deployed contracts to it. You can refer to [.env.example](frontend/.env.example) for the syntax.
+5. (Optional) If you have made any changes to the final smart contracts in [dappcamp-warriors](https://github.com/DappCamp-Cohort-4/dappcamp-warriors), you need to update the abis in the [abi folder](frontend/src/data/abis).
+6. Install project dependencies and run the project.
 
-<!-- #### Use circuit breakers -->
+```
+npm run install
+npm run dev
+```
 
-### Security resources
+---
 
-* [Consensys security best practices](https://consensys.github.io/smart-contract-best-practices/)
+### Deploying on Vercel
 
-* [Smart Contract Weakness Classification and Test Cases](https://swcregistry.io/)
+1. Click the deploy button below.
+1. Complete the **Create Git Repository** step in the Vercel Wizard.
+   1. Specify the organisation and the name of the repo to clone it
+1. Complete the **Configure Project** step in the Vercel Wizard. In this step, You have to configure the following environment variables:
+   1. **NEXT_PUBLIC_NETWORK_ID:** The id of the network on which your contracts are deployed. For example, the value will be **5** if your contracts are on the **Goerli** Testnet.
+   1. **NEXT_PUBLIC_CAMP_ADDRESS:** Address of the deployed Camp contract
+   1. **NEXT_PUBLIC_WARRIORS_ADDRESS:** Address of the deployed DappCampWarriors contract
+   1. **NEXT_PUBLIC_STAKING_ADDRESS:** Address of the deployed Staking contract
+   1. The [abis](src/data/abis) are already included in this repo. So, you don't need to update the abis if you don't make any changes to the smart contracts.
+1. Click on the deploy button
+1. Wait for a few minutes for the deploy to finish.
+1. You will be able to visit your new webapp on the generated url.
 
-* [Security considerations (Solidity docs)](https://docs.soliditylang.org/en/develop/security-considerations.html)
+[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2FDappCamp-Cohort-4%2Fdappcamp-warriors-frontend&env=NEXT_PUBLIC_NETWORK_ID,NEXT_PUBLIC_CAMP_ADDRESS,NEXT_PUBLIC_WARRIORS_ADDRESS,NEXT_PUBLIC_STAKING_ADDRESS)
 
-* [Twitter thread about security](https://twitter.com/The3D_/status/1485308693935763458)
+---
 
-* [OpenZeppelin audits](https://blog.openzeppelin.com/security-audits/)
+### Overview of the steps
 
-* [Certik audits](https://www.certik.com/)
+#### Step 1: Add frontend boilerplate
 
-* [How to become a smart contract auditor](https://cmichel.io/how-to-become-a-smart-contract-auditor/)
+- Initialize project with [Next.js + Tailwind CSS Template](https://github.com/vercel/next.js/tree/c3e5caf1109a2eb42801de23fc78e42a08e5da6e/examples/with-tailwindcss)
+- Install [prettier-plugin-tailwindcss plugin](https://github.com/tailwindlabs/prettier-plugin-tailwindcss) for automatic class sorting
+- Install ethers.js
+- Overview of the components:
+  - Next.js is a Node.js based framework for building server-side rendered React applications
+  - Tailwind is a library that provides utility css classes to style elements
+  - Ethers.js is a library for interacting with the Ethereum Blockchain
+- Setup meta tags by adding a [\_document.jsx file](https://nextjs.org/docs/advanced-features/custom-document)
+- Add utility methods for common operations like fetching connected accounts and signing a contract
+
+**Learning resources**
+
+- [React functional components](https://beta.reactjs.org/)
+- [Introduction to Next.js](https://nextjs.org/learn/foundations/about-nextjs)
+- [Tailwind](https://tailwindcss.com/docs/utility-first)
+- [Ethers.js](https://docs.ethers.io)
+
+#### Step 2: Add Connect Wallet button and Balance counter
+
+- Setup react contexts to share the connected account and contracts across pages in our app
+  - [Passing Data Deeply with Context](https://beta.reactjs.org/learn/passing-data-deeply-with-context)
+- Add Connect Wallet and Balance counter to the header
+  - Clicking on the connect wallet will prompt the user to connect metamask to our app
+  - Balance is fetched by reading the ERC20 balance from the Camp contract. It is refreshed every 1 second.
+
+#### Step 3: Add NFTs grid to home page
+
+- In this step, we add an NFT grid to the home page. The page queries the value of "\_tokenIds" from the Warriors contract and displays the details for each NFT.
+
+#### Step 4: Add Mint NFT form
+
+- In this step, we add a form to the "Mint" page. This form will only be visible to the owner of the contract. The owner will be able to mint a new NFT to a particular address using the form.
+- The mint button makes call to the Warriors contract
+
+#### Step 5: Add stake and unstake buttons
+
+- In this step, we add "stake and "unstake" buttons to the NFT component. The logged-in users will be able to see these buttons next to the NFTs they own.
+- The stake and unstake buttons make calls to the Staking contract
+
+### Resources
+
+Additional learning resources
+
+- [Master Ethers.js for Blockchain](https://www.youtube.com/watch?v=yk7nVp5HTCk)
+- [The Complete Guide to Full Stack Web3 Development](https://www.youtube.com/watch?v=nRMo5jjgCr4&t)
+
+We used barebones ethers.js to interact with our smart contracts. To abstract some of the common tasks and speed up your development, you can take a look at the following libraries:
+
+- [wagmi](https://github.com/tmm/wagmi)
+- [web3-ui](https://github.com/developer-DAO/web3-ui)
