@@ -1,32 +1,46 @@
 # DappCamp Warriors
 
-This repo contains a step by step walkthrough towards a fully fledged dApp that combines an NFT collection, an ERC20 token, and DeFi.
-Huge shoutout to [Lucas Janon](https://github.com/lucas-janon), a DappCamp alumni from Cohort 2 for his help with his repo. 
-This repo is derived from his original repo [here](https://github.com/dappcamp/dappcamp-warriors)
+## Scaffolding
 
-## Repo structure
+### Pre-requisites
 
-If you take a look at the existing branches, you'll see that there are multiple numbered branches. They build on top of each other, starting from `0-overview` (the one you're in, right now).
+* [Install foundry](https://book.getfoundry.sh/getting-started/installation)
 
-Each branch has its own readme, like this one, with an overview of the progress made towards the final dApp.
+### Overview
 
-Also, if you go to the [pull requests](https://github.com/dappcamp-cohort-4/dappcamp-warriors/pulls), every branch has a PR
-to the previous one, which is useful to see the [diff](https://github.com/dappcamp-cohort-4/dappcamp-warriors/pull/2/files).
+This branch shows the scaffolding of a [Foundry](https://getfoundry.sh/) project.
 
-## dApp overview
+To get a similar result, you can do the following:
 
-Some of the topics we'll cover in this walkthrough are:
+1) Install foundry by following the instructions from here: [Getting Started](https://book.getfoundry.sh/getting-started/installation)
 
-* Scaffolding a [Foundry](https://book.getfoundry.sh/) project. [1-scaffolding](https://github.com/dappcamp-cohort-4/dappcamp-warriors/tree/1-scaffolding).
-* Building, testing and deploying an [ERC20](https://eips.ethereum.org/EIPS/eip-20) (fungible) token. [2-create-erc20](https://github.com/dappcamp-cohort-4/dappcamp-warriors/tree/2-create-erc20).
-* Building, testing and deploying an [ERC721](https://eips.ethereum.org/EIPS/eip-721) (non-fungible) token. [3-create-erc721](https://github.com/dappcamp-cohort-4/dappcamp-warriors/tree/3-create-erc721).
-* Building, testing and deploying a staking contract (DeFi). [4-nft-staking](https://github.com/dappcamp-cohort-4/dappcamp-warriors/tree/4-nft-staking).
-* Gas optimization. [5-gas-optimization](https://github.com/dappcamp-cohort-4/dappcamp-warriors/tree/5-gas-optimization).
-* Security. [6-security](https://github.com/dappcamp-cohort-4/dappcamp-warriors/tree/6-security).
-* Interacting with your contracts from the browser. [7-ui](https://github.com/dappcamp-cohort-4/dappcamp-warriors/tree/7-ui).
+        cd .. && mkdir my-project && cd my-project
 
-## Questions and help
+2) To start a new project with Foundry, use the `forge init` command. Forge is a command-line tool that ships with Foundry. Forge tests, builds, and deploys your smart contracts.:
 
-You probably got into this repo because you're starting [DappCamp](https://www.dappcamp.xyz/). In that case, congrats, you'll have a lot of fun in the next weeks. You can reach your technical coaches for help.
+        forge init
 
-In case you aren't doing DappCamp and you need help, you can open an issue or contact me on [Twitter](https://twitter.com/lucasjanon).
+### Why Foundry
+
+Foundry is a relatively new, open-source smart contract development framework built by [Paradigm](https://paradigm.xyz/).
+Some of its benefits are:
+
+* Fast & flexible compilation pipeline
+* Tests are written in Solidity
+* Fast fuzz testing
+* Many more, listed on [its GitHub repo](https://github.com/foundry-rs/foundry)
+
+### Files and folders
+
+* `src` all your Solidity files will go here.
+* `lib` contains dependencies stored as submodules.
+* `out` compiled contract and abis
+* `script` Foundry scripts, e.g.: deploy scripts.
+* `test` this one's pretty self-explanatory.
+* `foundry.toml` configure foundry's behaviour
+
+### Recommended tooling
+
+#### VS Code Solidity extension
+
+Another useful extension is [Nomic Foundation's](https://marketplace.visualstudio.com/items?itemName=NomicFoundation.hardhat-solidity), also listed on the recommended extensions.
