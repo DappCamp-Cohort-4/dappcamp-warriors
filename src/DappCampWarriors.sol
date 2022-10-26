@@ -96,7 +96,7 @@ contract DappCampWarriors is ERC721("DappCampWarriors", "DWAR"), Ownable {
      */
     function mint(address to) public onlyOwner returns (uint256) {
         uint256 newWarriorId = _tokenIds.current();
-        _mint(to, newWarriorId);
+        _safeMint(to, newWarriorId);
 
         _tokenIds.increment();
 
