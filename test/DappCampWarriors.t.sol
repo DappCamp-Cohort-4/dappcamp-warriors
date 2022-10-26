@@ -4,9 +4,11 @@ pragma solidity ^0.8.4;
 import "forge-std/Test.sol";
 import "../src/DappCampWarriors.sol";
 
-contract DappCampWarriorsTest is Test {
+import "openzeppelin-contracts/token/ERC721/utils/ERC721Holder.sol";
+
+contract DappCampWarriorsTest is Test, ERC721Holder {
     DappCampWarriors public dappcampWarriors;
-    address owner = address(this);
+    address public owner = address(this);
     address user = address(0xDEAD);
 
     function setUp() public {
