@@ -68,3 +68,15 @@ function makeUntrustedWithdrawal(uint amount) {
 * [Certik audits](https://www.certik.com/)
 
 * [How to become a smart contract auditor](https://cmichel.io/how-to-become-a-smart-contract-auditor/)
+
+### Running the exploit script
+
+* Remove this line `eth_rpc_url = "RPC_URL_HERE"` from foundry.toml
+
+* Make sure that you are on the commit version where this error is not fixed
+
+* Run the following command to run the script
+
+```
+forge script script/Exploit.s.sol:ExploitScript
+```
