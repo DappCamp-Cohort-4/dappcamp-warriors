@@ -67,7 +67,7 @@ contract Staking {
 
         uint256 stakedSeconds = block.timestamp - staking.initTimestamp;
 
-        delete staking;
+        delete staked[tokenId];
 
         IERC721(dappCampWarriorsAddress).transferFrom(address(this), msg.sender, tokenId);
         ICamp(campAddress).mint(msg.sender, stakedSeconds * rewardPerSecondInWei);
