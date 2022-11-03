@@ -1,17 +1,18 @@
 # DappCamp Warriors
 
-## Create ERC721
+## NFT staking
 
-We'll give birth to the DappCamp warriors, an NFT collection using [ERC721](https://eips.ethereum.org/EIPS/eip-721).
+In the context of crypto, staking can be defined as holding an asset to get rewards in exchange, you can read more [here](https://www.coinbase.com/learn/crypto-basics/what-is-staking).
 
-Let's now go to [DappCampWarriors.sol](src/DappCampWarriors.sol), as you can see, the file is fully commented explaining what's going on.
-The format of the comments follows [NatSpec](https://docs.soliditylang.org/en/v0.8.13/natspec-format.html), the standard comment format for Solidity code.
+In this branch, we'll work on a staking contract that locks NFTs and gives ERC20 rewards.
+
+There's two important new files: [src/Staking.sol](src/Staking.sol) and [test/Staking.t.sol](test/Staking.t.sol), like always, they have explanatory comments.
 
 ## Test
 
 Forge comes with an in-built testing framework and allows us to write tests in Solidity itself.
 
-We added tests for ERC721 contract: [test/DappCampWarriors.t.sol](test/DappCampWarriors.t.sol).
+We added tests for the `Staking` contract: [test/Staking.t.sol](test/Staking.t.sol).
 
 To run all the tests you can run:
 `forge test`
@@ -43,14 +44,14 @@ source .env
 * Run foundry script
 
 ```
-forge script script/DappCampWarriors.s.sol:DeployScript --fork-url http://localhost:8545 --broadcast --private-key $PRIVATE_KEY
+forge script script/Staking.s.sol:DeployScript --fork-url http://localhost:8545 --broadcast --private-key $PRIVATE_KEY
 ```
 
 On successful completion you must have contract addresses printed on the console. Also check the `run-latest.json` file in `broadcast` directory for details on transactions made during the running of script.
 
 ### Deploying to testnet/mainnet
 
-Follow these steps to deploy to your desired testnet, you can skip the first 3 steps if you have already done this during ERC20 deployment:
+Follow these steps to deploy to your desired testnet, you can skip the first 3 steps if you have already done this during ERC20 or ERC721 deployment:
 
 * Rename `.env.example` to `.env` file.
 
@@ -61,11 +62,11 @@ Follow these steps to deploy to your desired testnet, you can skip the first 3 s
 * Run the following command to deploy
 
 ```bash
-forge script script/DappCampWarriors.s.sol:DeployScript --broadcast
+forge script script/Staking.s.sol:DeployScript --broadcast
 ```
 
 * Alternatively, to also verify the contract on etherscan, you can run the following command
 
 ```
-source .env && forge script script/DappCampWarriors.s.sol:DeployScript --broadcast --etherscan-api-key $ETHERSCAN_KEY --verify
+source .env && forge script script/Staking.s.sol:DeployScript --broadcast --etherscan-api-key $ETHERSCAN_KEY --verify
 ```
